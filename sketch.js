@@ -389,7 +389,7 @@ function drawTratteggio(y, larghezza) {
 // disegno il riquadro con i dettagli del paese su cui c'è il mouse
 function drawRiquadro(riga) {
   let larghezzaBox = 230;
-  let altezzaBox = 160;
+  let altezzaBox = 75;
 
   // riquadro sta in basso a destra del mouse
   let boxX = mouseX + 15;
@@ -415,17 +415,6 @@ function drawRiquadro(riga) {
   textSize(13);
   text(dati.getNum(riga, "kg_procapite") + " kg per persona all'anno", boxX + 14, boxY + 40);
 
-  // legenda bevande nell'ordine dall'alto verso il basso come nella tazza
-  let yRiga = boxY + 68;
-  for (let i = bevande.length - 1; i >= 0; i--) {
-    fill(coloriBevande[i]);
-    stroke("#FBF7F0"); // bordo chiaro intorno ai quadratini delle bevande
-    rect(boxX + 14, yRiga, 12, 12, 2);
-    noStroke();
-    fill("#FBF7F0");
-    text(nomiBevande[i] + ": " + dati.getNum(riga, bevande[i]) + "%", boxX + 34, yRiga - 1);
-    yRiga = yRiga + 21;
-  }
 }
 
 /* ridimensionare tutto in base alle dimensioni della finestra
