@@ -24,36 +24,45 @@ async function setup() {
   // se sul computer non c'è futura usa un altro font senza grazie
   textFont("Futura, sans-serif");
 
-  dati = await loadTable("assets/caffe.csv", ",", "header"); // carico il dataset
+  // carico il dataset (percorso, separatore, opzioni)
+  dati = await loadTable("assets/caffe.csv", ",", "header"); 
 
   // cerco il valore più alto di kg a persona
   for (let riga = 0; riga < dati.getRowCount(); riga++) {
     let kg = dati.getNum(riga, "kg_procapite");
+
+    /* conserva il valore massimo di kg di caffè per persona, necessario
+    per fare in modo che la proporzione di tutte le tazzine si basi sulla stessa scala. */
     if (kg > maxKg) {
       maxKg = kg;
     }
   }
 }
 
+/* draw() viene ripetuta continuamente, quindi si ridisegna il grafico e ogni volta
+viene aggiornata l'interazione col mouse. */
 function draw() {
   background("#EFE4D6");
   drawTitolo();
 
-  // il vassoio occupa tutta la larghezza della finestra con 50 px di margine ai lati per le maniglie
+  /* il vassoio occupa tutta la larghezza della finestra con 50 px di margine ai lati
+  per le maniglie e in altezza ne lascia 150 per inserire il titolo */
   let xVassoio = 50;
   let yVassoio = 150;
   let larghezzaVassoio = width - 100;
   let altezzaVassoio = height - yVassoio - 50; // 50 px liberi in basso per il bordo
   drawVassoio(xVassoio, yVassoio, larghezzaVassoio, altezzaVassoio);
 
-  // area del grafico dentro il vassoio con spazio sopra per le tazze e ai lati per le scritte
-  sinistra = xVassoio + 80;
-  destra = xVassoio + larghezzaVassoio - 60;
+  /* area del grafico dentro il vassoio con spazio sopra per le tazze e ai lati per le scritte
+  quindi è letteralmente la dimensione totale della griglia */
+  sinistra = xVassoio + 80; //definisco punto in cui parte a sx, 80 px per bordo e percentuale
+  destra = xVassoio + larghezzaVassoio - 60; //60px lasciati per bordo + spazio a dx
   alto = yVassoio + 110;
   basso = yVassoio + altezzaVassoio - 70;
+
   /* la tazza più grande è larga al massimo 75 px, ma nelle finestre basse si rimpicciolisce
  così le tazze non finiscono sotto lo scontrino */
-  larghezzaMax = min(75, (basso - alto) * 0.12);
+  larghezzaMax = min(75, (basso - alto) * 0.2);
   drawAssi(xVassoio, yVassoio, altezzaVassoio);
 
   /* primo ciclo, cerco la tazza su cui c'è il mouse.
