@@ -230,29 +230,25 @@ function drawAssi(xVassoio, yVassoio, altezzaVassoio) {
 // w = larghezza della tazza, percentuali = le 4 bevande, evidenziata = mouse sopra
 function drawTazza(x, yAppoggio, w, percentuali, evidenziata) {
   let h = w * 0.9; // altezza della tazza
-  let yBase = yAppoggio - w * 0.12; // fondo della tazza (appoggiato sul piattino)
+  let yBase = yAppoggio - w * 0.15; // fondo della tazza (appoggiato sul piattino)
   let margine = w * 0.08; // spessore del bordo bianco della tazza
 
   push();
 
   // disegno piattino
-  fill("#D9C9B6");
-  noStroke();
-  ellipse(x, yAppoggio - w * 0.08, w * 1.5, w * 0.16);
   fill("#FFFFFF");
-  stroke("#C9B49C");
-  strokeWeight(1);
-  ellipse(x, yAppoggio - w * 0.11, w * 1.4, w * 0.14);
+  noStroke();
+  ellipse(x, yAppoggio - w * 0.15, w * 1.5, w * 0.15);
 
   /* disegno manico fatto due volte in modo che il bordo esca anche all'interno del buco
   quindi prima lo disegno un po' più spesso in beige , poi sopra in bianco */
   noFill();
   stroke("#C9B49C");
-  strokeWeight(w * 0.09 + 2);
-  ellipse(x + w * 0.5, yBase - h * 0.55, w * 0.42, h * 0.45);
+  strokeWeight(w * 0.1 + 2);
+  ellipse(x + w * 0.5, yBase - h * 0.5, w * 0.4, h * 0.45);
   stroke("#FFFFFF");
   strokeWeight(w * 0.09);
-  ellipse(x + w * 0.5, yBase - h * 0.55, w * 0.42, h * 0.45);
+  ellipse(x + w * 0.5, yBase - h * 0.5, w * 0.4, h * 0.45);
 
   // corpo della tazza (angoli in basso arrotondati)
   fill("#FFFFFF");
@@ -264,7 +260,7 @@ function drawTazza(x, yAppoggio, w, percentuali, evidenziata) {
     stroke("#C9B49C");
     strokeWeight(1);
   }
-  rect(x - w / 2, yBase - h, w, h, 0, 0, w * 0.18, w * 0.18);
+  rect(x - w / 2, yBase - h, w, h, 0, 0, w * 0.15, w * 0.15);
 
   // interno della tazza con lo stesso margine su tutti e 4 i lati
   let xInterno = x - w / 2 + margine;
