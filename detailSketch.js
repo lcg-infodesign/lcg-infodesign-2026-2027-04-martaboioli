@@ -159,8 +159,6 @@ function drawTazza(x, yAppoggio, w, colore) {
 
   // bevanda dentro la tazza, QUI DI UN COLORE SOLO
   noStroke();
-
-  // 
   fill(colore);
   rect(x - w / 2 + margine, yBase - h + margine, w - margine * 2, h - margine * 2, 0, 0, w * 0.1, w * 0.1);
 
@@ -197,16 +195,6 @@ function drawLegenda() {
   textSize(18);
   text("LEGENDA", larghezza / 2, 20);
 
-  // linea tratteggiata orizzontale tipo righe scontrino x separare le sezioni
-    function drawTratteggio(y, larghezza) {
-        stroke("#C9B49C");
-        strokeWeight(1);
-        for (let x = 20; x < larghezza - 20; x = x + 8) {
-        line(x, y, x + 4, y); // trattino di 4 px, poi 4 px vuoti
-        }
-        noStroke();
-    }
-
   drawTratteggio(50, larghezza);
 
   // legenda bevande nello stesso ordine delle tazzine con prima l'espresso e per ultimo il caffellatte
@@ -229,47 +217,58 @@ function drawLegenda() {
 
   drawTratteggio(166, larghezza);
 
-  // link sotto le percentuali che rimanda alla pagina d'insieme
-  function drawLinkIndietro() {
-        noStroke();
-        fill("#7A4E33");
-        textAlign(LEFT, TOP);
-        textSize(13);
-        text("← Torna all'overview", 132, 190);
-
-        // se il mouse è sopra la scritta il cursore diventa la manina
-        if (sopraLink()) {
-            cursor(HAND);
-        } else {
-            cursor(ARROW);
-        }
-    }
-
-    /* controlla se il mouse è sopra la scritta
-    RICORDATI CHE mouseX e mouseY sono SEMPRE!!!! coordinate della FINESTRA, non dello scontrino,
-    quindi devo ricalcolare dove si trova la scritta nella finestra ufff*/ 
-    function sopraLink() {
-        textSize(13);
-
-        // definisco la parte cliccabile
-        let larghezzaLink = textWidth("← Torna all'overview");
-        let xLink = width - 380 + 132 - 7;
-        let yLink = 45 + 190 + 5;
-
-        // operatore logico AND quindi tutte devono essere VERE
-        return mouseX > xLink && mouseX < xLink + larghezzaLink && mouseY > yLink && mouseY < yLink + 16;
-    }
-
-    /* cliccando sulla scritta torno alla pagina d'insieme
-    mousePressed deve stare FUORI da tutte le altre funzioni, altrimenti p5 non la trova */
-    function mousePressed() {
-        // se il paese non esiste, qualsiasi clic riporta all'overview
-        if (rigaScelta == -1 || sopraLink()) {
-            window.location.href = "index.html";
-        }
-    }
-
   drawLinkIndietro();
 
   pop();
+}
+
+
+// link sotto le percentuali che rimanda alla pagina d'insieme
+function drawLinkIndietro() {
+     noStroke();
+     fill("#7A4E33");
+     textAlign(LEFT, TOP);
+     textSize(13);
+     text("← Torna all'overview", 132, 190);
+
+     // se il mouse è sopra la scritta il cursore diventa la manina
+     if (sopraLink()) {
+         cursor(HAND);
+     } else {
+        cursor(ARROW);
+    }
+}
+
+/* controlla se il mouse è sopra la scritta
+RICORDATI CHE mouseX e mouseY sono SEMPRE!!!! coordinate della FINESTRA, non dello scontrino,
+quindi devo ricalcolare dove si trova la scritta nella finestra ufff*/ 
+function sopraLink() {
+    textSize(13);
+     // definisco la parte cliccabile
+     let larghezzaLink = textWidth("← Torna all'overview");
+    let xLink = width - 380 + 132 - 7;
+    let yLink = 45 + 190 + 5;
+
+    // operatore logico AND quindi tutte devono essere VERE
+    return mouseX > xLink && mouseX < xLink + larghezzaLink && mouseY > yLink && mouseY < yLink + 16;
+}
+
+/* cliccando sulla scritta torno alla pagina d'insieme
+mousePressed deve stare FUORI da tutte le altre funzioni, altrimenti p5 non la trova
+perché dev'essere utilizzabile ovunque QUINDI va in fondo!! */
+function mousePressed() {
+    // se il paese non esiste, qualsiasi clic riporta all'overview
+    if (rigaScelta == -1 || sopraLink()) {
+      window.location.href = "index.html";
+    }
+}
+
+// linea tratteggiata orizzontale tipo righe scontrino x separare le sezioni
+function drawTratteggio(y, larghezza) {
+    stroke("#C9B49C");
+    strokeWeight(1);
+     for (let x = 20; x < larghezza - 20; x = x + 8) {
+    line(x, y, x + 4, y); // trattino di 4 px, poi 4 px vuoti
+    }
+     noStroke();
 }

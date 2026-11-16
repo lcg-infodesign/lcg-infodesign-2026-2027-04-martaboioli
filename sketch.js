@@ -18,6 +18,10 @@ let asseYmax = 70; // al valore massimo 70%
 let sinistra, destra, alto, basso;
 let larghezzaMax;
 
+/* paese su cui c'è il mouse (-1 = nessuno, perché le righe iniziano da 0).
+sta fuori da draw() perché serve anche a mousePressed() per sapere quale pagina aprire */
+let paeseHover = -1;
+
 async function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES); // imposto angoli in gradi
@@ -312,7 +316,7 @@ function drawVapore(x, yTop) {
 // legenda a forma di scontrino, appoggiata nell'angolo in alto a destra del vassoio
 function drawLegenda() {
   let larghezza = 300;
-  let altezza = 470;
+  let altezza = 370;
 
   push();
   // sposto l'origine nell'angolo dello scontrino e lo giro di 2 gradi
@@ -366,33 +370,12 @@ function drawLegenda() {
   text("Più è in alto, più latte si beve con il caffè (cappuccino e caffellatte).", 20, 222, 260);
   drawTratteggio(268, larghezza);
 
-  // strati in due colonne, nello stesso ordine della tazza (in alto le bevande chiare)
-  text("Ogni strato è una bevanda:", 20, 280);
-  for (let i = 0; i < bevande.length; i++) {
-    // i = 3 e 2 (caffellatte, cappuccino) nella prima riga, i = 1 e 0 nella seconda
-    let colonna = (bevande.length - 1 - i) % 2; // 0 = sinistra, 1 = destra
-    let rigaStrato = floor((bevande.length - 1 - i) / 2); // 0 = sopra, 1 = sotto
-    let xStrato = 20 + colonna * 130;
-    let yStrato = 304 + rigaStrato * 22;
-    fill(coloriBevande[i]);
-    stroke("#C9B49C");
-    strokeWeight(1);
-    rect(xStrato, yStrato, 16, 13, 3);
-    noStroke();
-    fill("#3B2116");
-    text(nomiBevande[i], xStrato + 24, yStrato - 1);
-  }
-  drawTratteggio(354, larghezza);
-
   // interazione e fonte dei dati
   fill("#7A4E33");
   text(
-    "Clicca su una tazza per scoprire quali, fra le bevande a base di caffè, sono più diffuse in ogni paese.",
-    20, 366, 260
+    "Ogni strato è una bevanda. Clicca su una tazza per scoprire quali, fra le bevande con caffè, sono più diffuse in ogni paese.",
+    20, 280, 260
   );
-  fill("#A8927E");
-  textSize(9);
-  text("Kg di caffè a persona: Euromonitor 2013.", 20, 428, 260);
 
   pop();
 }
