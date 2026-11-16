@@ -14,7 +14,7 @@ let asseXmax = 10; // valore max 10kg (nessun paese beve meno di 1 kg, quindi no
 let asseYmin = 10; // asse y: % di bevande con il latte, da 10%
 let asseYmax = 70; // al valore massimo 70%
 
-// bordi dell'area del grafico e tazza più grande
+// bordi dell'area del grafico e tazza più grande per definirli dopo
 let sinistra, destra, alto, basso;
 let larghezzaMax;
 
@@ -55,6 +55,7 @@ function draw() {
 
   /* area del grafico dentro il vassoio con spazio sopra per le tazze e ai lati per le scritte
   quindi è letteralmente la dimensione totale della griglia */
+  // ora definisco le variabili dell'area del grafico che ho dichiarato sopra
   sinistra = xVassoio + 80; //definisco punto in cui parte a sx, 80 px per bordo e percentuale
   destra = xVassoio + larghezzaVassoio - 60; //60px lasciati per bordo + spazio a dx
   alto = yVassoio + 110;
@@ -63,10 +64,12 @@ function draw() {
   /* la tazza più grande è larga al massimo 75 px, ma nelle finestre basse si rimpicciolisce
  così le tazze non finiscono sotto lo scontrino */
   larghezzaMax = min(75, (basso - alto) * 0.2);
+
+  // disegno gli assi del grafico con le tazze
   drawAssi(xVassoio, yVassoio, altezzaVassoio);
 
-  /* primo ciclo, cerco la tazza su cui c'è il mouse.
-  Se due tazze si sovrappongono prende quella messa "davanti" */
+  /* primo ciclo dove cerco la tazza su cui c'è il mouse.
+  se due tazze si sovrappongono prende quella messa "davanti" */
   let paeseHover = -1; // -1 = nessuno (le righe iniziano da 0)
   for (let riga = 0; riga < dati.getRowCount(); riga++) {
     let x = posizioneX(riga);
@@ -109,6 +112,18 @@ function draw() {
   è diverso da -1 sto passando con il mouse sopra ad un paese */
   if (paeseHover != -1) {
     drawRiquadro(paeseHover);
+    cursor(HAND); // esce la manina che fa capire che si può cliccare
+  } else {
+    cursor(ARROW); // il cursore rimane a freccia
+  }
+}
+
+// quando clicco su una tazza apro la pagina di dettaglio di quel paese
+function mousePressed() {
+  if (paeseHover != -1) {
+    // nell'indirizzo passo l'id del paese
+    let id = dati.getString(paeseHover, "id");
+    window.location.href = "detail.html?paese=" + id;
   }
 }
 
@@ -169,36 +184,46 @@ function drawAssi(xVassoio, yVassoio, altezzaVassoio) {
   textSize(12);
   fill("#F1DCC0");
 
-  // asse x: una linea verticale per ogni kg, numeri sul bordo davanti del vassoio
+  /* asse x: una linea verticale per ogni kg, numeri sul bordo
+  davanti del vassoio e ogni volta aumenta di un kg */
   for (let kg = asseXmin; kg <= asseXmax; kg++) {
     let x = map(kg, asseXmin, asseXmax, sinistra, destra);
+
+    // disegno le linee della griglia
     stroke("#9A6845");
     strokeWeight(1);
     line(x, alto - 40, x, basso);
+
+    // disegno i numeri dei kg
     noStroke();
     textAlign(CENTER, CENTER);
-    text(kg, x, yVassoio + altezzaVassoio - 11); // al centro del bordo (alto 22 px)
+    text(kg, x, yVassoio + altezzaVassoio - 40); // al centro del bordo (alto 22 px)
   }
 
-  // asse y: una linea orizzontale ogni 10% di latte, numeri a sinistra
+  /* asse y: una linea orizzontale ogni 10% di latte che anche qui aumenta,
+  numeri a sinistra della griglia un po' sopra x non scontrarsi con i numeri dei kg*/
   for (let p = asseYmin; p <= asseYmax; p = p + 10) {
     let y = map(p, asseYmin, asseYmax, basso, alto);
+
+    // disegno gli assi
     stroke("#9A6845");
     strokeWeight(1);
     line(sinistra, y, destra, y);
+
+    // scrivo la percentuale
     noStroke();
     textAlign(RIGHT, CENTER);
-    text(p + "%", sinistra - 12, y);
+    text(p + "%", sinistra - 15, y); // qui il -15 è per non farlo scontrare
   }
 
   // titoli degli assi
   textSize(13);
   textAlign(LEFT, TOP);
-  text("Percentuale di latte", sinistra - 40, yVassoio + 40);
+  text("percentuale di latte", sinistra - 40, yVassoio + 40);
   // titolo dell'asse x, sotto il vassoio allineato a dx
   fill("#7A4E33");
   textAlign(RIGHT, TOP);
-  text("Kg di caffè per persona all'anno", destra, yVassoio + altezzaVassoio + 12);
+  text("kg di caffè per persona all'anno", destra, yVassoio + altezzaVassoio + 12);
 }
 
 // x = centro della tazza, yAppoggio = dove appoggia il piattino
@@ -366,7 +391,7 @@ function drawLegenda() {
   // interazione e fonte dei dati
   fill("#7A4E33");
   text(
-    "Passa il mouse su una tazza per vedere quali, fra le bevande a base di caffè, sono più diffuse in ogni paese.",
+    "Clicca su una tazza per scoprire quali, fra le bevande a base di caffè, sono più diffuse in ogni paese.",
     20, 366, 260
   );
   fill("#A8927E");
