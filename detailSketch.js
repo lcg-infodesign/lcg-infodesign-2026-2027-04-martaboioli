@@ -98,3 +98,110 @@ function drawVassoio(x, y, w, h) {
   fill("#8A5A3B");
   rect(x + 22, y + 22, w - 44, h - 44, 18);
 }
+
+/* legenda in alto a destra, scontrino uguale alla pagina d'insieme
+ma con dentro le percentuali delle bevande */
+function drawLegenda() {
+  
+  // dimensioni dello scontrino  
+  let larghezza = 280;
+  let altezza = 260;
+
+  push();
+  /* sposto l'origine nell'angolo dello scontrino e lo giro di 2 gradi
+  in modo che poi tutti gli elementi dentro si basino su questo */
+  translate(width - 380, 45);
+  rotate(2);
+
+  // carta bianca dello scontrino
+  noStroke();
+  fill("#FBF7F0");
+  rect(0, 0, larghezza, altezza);
+
+  // bordo in basso seghettato
+  for (let xz = 0; xz < larghezza; xz = xz + 10) {
+    triangle(xz, altezza, xz + 10, altezza, xz + 5, altezza + 7);
+  }
+
+  // scritta LEGENDA in alto allineata al centro
+  fill("#3B2116");
+  textAlign(CENTER, TOP);
+  textSize(18);
+  text("LEGENDA", larghezza / 2, 20);
+
+  // linea tratteggiata orizzontale tipo righe scontrino x separare le sezioni
+    function drawTratteggio(y, larghezza) {
+        stroke("#C9B49C");
+        strokeWeight(1);
+        for (let x = 20; x < larghezza - 20; x = x + 8) {
+        line(x, y, x + 4, y); // trattino di 4 px, poi 4 px vuoti
+        }
+        noStroke();
+    }
+
+  drawTratteggio(50, larghezza);
+
+  // legenda bevande nello stesso ordine delle tazzine con prima l'espresso e per ultimo il caffellatte
+  textSize(14);
+  let yRiga = 64;
+  for (let i = 0; i < bevande.length; i++) {
+    fill(coloriBevande[i]);
+    stroke("#C9B49C");
+    strokeWeight(1);
+    rect(20, yRiga, 16, 13, 3);
+    noStroke();
+    fill("#3B2116");
+    textAlign(LEFT, TOP);
+    text(nomiBevande[i], 46, yRiga - 1);
+    // percentuale allineata a destra, come il prezzo su uno scontrino
+    textAlign(RIGHT, TOP);
+    text(dati.getNum(rigaScelta, bevande[i]) + "%", larghezza - 20, yRiga - 1);
+    yRiga = yRiga + 24;
+  }
+
+  drawTratteggio(166, larghezza);
+
+  // link sotto le percentuali che rimanda alla pagina d'insieme
+  function drawLinkIndietro() {
+        noStroke();
+        fill("#7A4E33");
+        textAlign(LEFT, TOP);
+        textSize(13);
+        text("← Torna all'overview", 132, 190);
+
+        // se il mouse è sopra la scritta il cursore diventa la manina
+        if (sopraLink()) {
+            cursor(HAND);
+        } else {
+            cursor(ARROW);
+        }
+    }
+
+    /* controlla se il mouse è sopra la scritta
+    RICORDATI CHE mouseX e mouseY sono SEMPRE!!!! coordinate della FINESTRA, non dello scontrino,
+    quindi devo ricalcolare dove si trova la scritta nella finestra ufff*/ 
+    function sopraLink() {
+        textSize(13);
+
+        // definisco la parte cliccabile
+        let larghezzaLink = textWidth("← Torna all'overview");
+        let xLink = width - 380 + 132 - 7;
+        let yLink = 45 + 190 + 5;
+
+        // operatore logico AND quindi tutte devono essere VERE
+        return mouseX > xLink && mouseX < xLink + larghezzaLink && mouseY > yLink && mouseY < yLink + 16;
+    }
+
+    /* cliccando sulla scritta torno alla pagina d'insieme
+    mousePressed deve stare FUORI da tutte le altre funzioni, altrimenti p5 non la trova */
+    function mousePressed() {
+        // se il paese non esiste, qualsiasi clic riporta all'overview
+        if (rigaScelta == -1 || sopraLink()) {
+            window.location.href = "index.html";
+        }
+    }
+
+  drawLinkIndietro();
+
+  pop();
+}
