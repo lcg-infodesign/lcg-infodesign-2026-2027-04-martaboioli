@@ -74,7 +74,15 @@ function draw() {
 
   /* primo ciclo dove cerco la tazza su cui c'è il mouse.
   se due tazze si sovrappongono prende quella messa "davanti" */
-  let paeseHover = -1; // -1 = nessuno (le righe iniziano da 0)
+
+  /* MARTA QUI RICORDATI CHE hai già dichiarato prima la variabile 
+  quindi non devi ridichiararla ma solo ASSEGNARE quant'è ora il valore
+  altrimenti se tieni anche qui il let davanti JS ne crea un'altra
+  E QUI NON VA BENE PERCHÈ la funzione mousePressed è fuori da draw()
+  quindi guarda la variabile dichiarata sopra che starebbe sempre a -1
+  e che significa che il mouse non è sopra a nessuna tazza
+  quindi ecco perché cliccando non succedeva nulla !!! */
+  paeseHover = -1; // -1 = nessuno (le righe iniziano da 0)
   for (let riga = 0; riga < dati.getRowCount(); riga++) {
     let x = posizioneX(riga);
     let y = posizioneY(riga);

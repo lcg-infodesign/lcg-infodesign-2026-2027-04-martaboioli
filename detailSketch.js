@@ -55,7 +55,7 @@ function draw() {
   // area per le tazzine dentro il vassoio e sotto lo scontrino
   let sinistra = xVassoio + 60;
   let destra = xVassoio + larghezzaVassoio - 60;
-  let alto = 340;
+  let alto = 320;
   let basso = yVassoio + altezzaVassoio - 50;
 
   let cellaX = (destra - sinistra) / colonne; // 20 celle in larghezza
@@ -171,7 +171,7 @@ function drawLegenda() {
   
   // dimensioni dello scontrino  
   let larghezza = 280;
-  let altezza = 260;
+  let altezza = 230;
 
   push();
   /* sposto l'origine nell'angolo dello scontrino e lo giro di 2 gradi
@@ -258,7 +258,7 @@ mousePressed deve stare FUORI da tutte le altre funzioni, altrimenti p5 non la t
 perché dev'essere utilizzabile ovunque QUINDI va in fondo!! */
 function mousePressed() {
     // se il paese non esiste, qualsiasi clic riporta all'overview
-    if (rigaScelta == -1 || sopraLink()) {
+    if (sopraLink()) {
       window.location.href = "index.html";
     }
 }
