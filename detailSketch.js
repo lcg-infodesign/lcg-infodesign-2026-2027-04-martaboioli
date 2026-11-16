@@ -16,8 +16,8 @@ let colonne = 20;
 let file = 5;
 
 // tazzine con ripieno colorato in base alla bevanda
-// scontrino con legenda
-// bottone per tornare alla pagina principale
+// scontrino con legenda OK
+// bottone per tornare alla pagina principale OK
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -63,6 +63,34 @@ function draw() {
   // la tazzina occupa il 60% del lato più corto della cella, così non esce mai dalla cella
   let w = min(cellaX, cellaY) * 0.6;
 
+  // dove appoggia il piattino delle tazzine della fila più in alto
+  let yFilaAlta = alto + cellaY * 0.75;
+
+  /* disegno le 100 tazzine partendo in alto a sinistra
+  prima tutte quelle di espresso, poi americano, cappuccino e caffellatte.
+  n parte a contare quante tazzine ho già disegnato (da 0 a 99) 
+  quindi è BEV iniziali = 0
+  */
+  let n = 0;
+  for (let b = 0; b < bevande.length; b++) {
+    let quanteTazzine = dati.getNum(rigaScelta, bevande[b]); // la percentuale = quante tazzine
+    for (let k = 0; k < quanteTazzine; k++) {
+
+      // definisco colonna e fila in cui si trova la tazza
+      let colonna = n % colonne; // da 0 a 19
+      let fila = floor(n / colonne); // da 0 (in alto) a 4 (in basso)
+
+      // definisco coordinate x posizionare tazza
+      let x = sinistra + colonna * cellaX + cellaX / 2;
+      let y = yFilaAlta + fila * cellaY;
+      
+      // le file scendono, quindi aggiungo
+      drawTazza(x, y, w, coloriBevande[b]);
+      n++;
+    }
+  }
+
+  drawLegenda();
 }
 
 // titolo con nome paese + sottotitolo con numero kg caffè per persona
@@ -97,6 +125,46 @@ function drawVassoio(x, y, w, h) {
   // piano del vassoio, un po' più dentro del bordo
   fill("#8A5A3B");
   rect(x + 22, y + 22, w - 44, h - 44, 18);
+}
+
+// tazzina (uguale alla pagina d'insieme)
+// x = centro, yAppoggio = dove appoggia il piattino, w = larghezza, colore = bevanda
+function drawTazza(x, yAppoggio, w, colore) {
+  let h = w * 0.9; // altezza della tazza
+  let yBase = yAppoggio - w * 0.15; // fondo della tazza (appoggiato sul piattino)
+  let margine = w * 0.08; // spessore del bordo bianco della tazza
+
+  push();
+
+  // disegno piattino
+  fill("#FFFFFF");
+  noStroke();
+  ellipse(x, yAppoggio - w * 0.15, w * 1.5, w * 0.15);
+
+  /* disegno manico fatto due volte in modo che il bordo esca anche all'interno del buco
+  quindi prima lo disegno un po' più spesso in beige , poi sopra in bianco */
+  noFill();
+  stroke("#C9B49C");
+  strokeWeight(w * 0.1 + 2);
+  ellipse(x + w * 0.5, yBase - h * 0.5, w * 0.4, h * 0.45);
+  stroke("#FFFFFF");
+  strokeWeight(w * 0.09);
+  ellipse(x + w * 0.5, yBase - h * 0.5, w * 0.4, h * 0.45);
+
+  // corpo della tazza
+  fill("#FFFFFF");
+  stroke("#C9B49C");
+  strokeWeight(1);
+  rect(x - w / 2, yBase - h, w, h, 0, 0, w * 0.18, w * 0.18);
+
+  // bevanda dentro la tazza, QUI DI UN COLORE SOLO
+  noStroke();
+
+  // 
+  fill(colore);
+  rect(x - w / 2 + margine, yBase - h + margine, w - margine * 2, h - margine * 2, 0, 0, w * 0.1, w * 0.1);
+
+  pop();
 }
 
 /* legenda in alto a destra, scontrino uguale alla pagina d'insieme
@@ -145,19 +213,19 @@ function drawLegenda() {
   textSize(14);
   let yRiga = 64;
   for (let i = 0; i < bevande.length; i++) {
-    fill(coloriBevande[i]);
-    stroke("#C9B49C");
-    strokeWeight(1);
-    rect(20, yRiga, 16, 13, 3);
-    noStroke();
-    fill("#3B2116");
-    textAlign(LEFT, TOP);
-    text(nomiBevande[i], 46, yRiga - 1);
-    // percentuale allineata a destra, come il prezzo su uno scontrino
-    textAlign(RIGHT, TOP);
-    text(dati.getNum(rigaScelta, bevande[i]) + "%", larghezza - 20, yRiga - 1);
-    yRiga = yRiga + 24;
-  }
+        fill(coloriBevande[i]);
+        stroke("#C9B49C");
+        strokeWeight(1);
+        rect(20, yRiga, 16, 13, 3);
+        noStroke();
+        fill("#3B2116");
+        textAlign(LEFT, TOP);
+        text(nomiBevande[i], 46, yRiga - 1);
+        // percentuale allineata a destra, come il prezzo su uno scontrino
+        textAlign(RIGHT, TOP);
+        text(dati.getNum(rigaScelta, bevande[i]) + "%", larghezza - 20, yRiga - 1);
+        yRiga = yRiga + 24;
+    }
 
   drawTratteggio(166, larghezza);
 
