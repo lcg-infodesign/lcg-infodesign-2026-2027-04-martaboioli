@@ -40,12 +40,12 @@ async function setup() {
 }
 
 function draw() {
-    // stesso colore sfondo dell'altra pagina
-    background("#EFE4D6");
+  // stesso colore sfondo dell'altra pagina
+  background("#EFE4D6");
 
-    drawTitolo();
+  drawTitolo();
 
-    // vassoio con stesse misure della pagina d'insieme
+  // vassoio con stesse misure della pagina d'insieme
   let xVassoio = 50;
   let yVassoio = 150;
   let larghezzaVassoio = width - 100;
@@ -75,7 +75,6 @@ function draw() {
   for (let b = 0; b < bevande.length; b++) {
     let quanteTazzine = dati.getNum(rigaScelta, bevande[b]); // la percentuale = quante tazzine
     for (let k = 0; k < quanteTazzine; k++) {
-
       // definisco colonna e fila in cui si trova la tazza
       let colonna = n % colonne; // da 0 a 19
       let fila = floor(n / colonne); // da 0 (in alto) a 4 (in basso)
@@ -83,7 +82,7 @@ function draw() {
       // definisco coordinate x posizionare tazza
       let x = sinistra + colonna * cellaX + cellaX / 2;
       let y = yFilaAlta + fila * cellaY;
-      
+
       // le file scendono, quindi aggiungo
       drawTazza(x, y, w, coloriBevande[b]);
       n++;
@@ -103,7 +102,12 @@ function drawTitolo() {
 
   fill("#7A4E33");
   textSize(18);
-  text(dati.getNum(rigaScelta, "kg_procapite") + " kg di caffè per persona all'anno", 42, 88);
+  text(
+    dati.getNum(rigaScelta, "kg_procapite") +
+      " kg di caffè per persona all'anno",
+    42,
+    88,
+  );
 }
 
 // vassoio di legno con le maniglie ai lati (uguale alla pagina d'insieme)
@@ -160,7 +164,16 @@ function drawTazza(x, yAppoggio, w, colore) {
   // bevanda dentro la tazza, QUI DI UN COLORE SOLO
   noStroke();
   fill(colore);
-  rect(x - w / 2 + margine, yBase - h + margine, w - margine * 2, h - margine * 2, 0, 0, w * 0.1, w * 0.1);
+  rect(
+    x - w / 2 + margine,
+    yBase - h + margine,
+    w - margine * 2,
+    h - margine * 2,
+    0,
+    0,
+    w * 0.1,
+    w * 0.1,
+  );
 
   pop();
 }
@@ -168,8 +181,7 @@ function drawTazza(x, yAppoggio, w, colore) {
 /* legenda in alto a destra, scontrino uguale alla pagina d'insieme
 ma con dentro le percentuali delle bevande */
 function drawLegenda() {
-  
-  // dimensioni dello scontrino  
+  // dimensioni dello scontrino
   let larghezza = 280;
   let altezza = 230;
 
@@ -201,19 +213,19 @@ function drawLegenda() {
   textSize(14);
   let yRiga = 64;
   for (let i = 0; i < bevande.length; i++) {
-        fill(coloriBevande[i]);
-        stroke("#C9B49C");
-        strokeWeight(1);
-        rect(20, yRiga, 16, 13, 3);
-        noStroke();
-        fill("#3B2116");
-        textAlign(LEFT, TOP);
-        text(nomiBevande[i], 46, yRiga - 1);
-        // percentuale allineata a destra, come il prezzo su uno scontrino
-        textAlign(RIGHT, TOP);
-        text(dati.getNum(rigaScelta, bevande[i]) + "%", larghezza - 20, yRiga - 1);
-        yRiga = yRiga + 24;
-    }
+    fill(coloriBevande[i]);
+    stroke("#C9B49C");
+    strokeWeight(1);
+    rect(20, yRiga, 16, 13, 3);
+    noStroke();
+    fill("#3B2116");
+    textAlign(LEFT, TOP);
+    text(nomiBevande[i], 46, yRiga - 1);
+    // percentuale allineata a destra, come il prezzo su uno scontrino
+    textAlign(RIGHT, TOP);
+    text(dati.getNum(rigaScelta, bevande[i]) + "%", larghezza - 20, yRiga - 1);
+    yRiga = yRiga + 24;
+  }
 
   drawTratteggio(166, larghezza);
 
@@ -222,53 +234,57 @@ function drawLegenda() {
   pop();
 }
 
-
 // link sotto le percentuali che rimanda alla pagina d'insieme
 function drawLinkIndietro() {
-     noStroke();
-     fill("#7A4E33");
-     textAlign(LEFT, TOP);
-     textSize(13);
-     text("← Torna all'overview", 132, 190);
+  noStroke();
+  fill("#7A4E33");
+  textAlign(LEFT, TOP);
+  textSize(13);
+  text("← Torna all'overview", 132, 190);
 
-     // se il mouse è sopra la scritta il cursore diventa la manina
-     if (sopraLink()) {
-         cursor(HAND);
-     } else {
-        cursor(ARROW);
-    }
+  // se il mouse è sopra la scritta il cursore diventa la manina
+  if (sopraLink()) {
+    cursor(HAND);
+  } else {
+    cursor(ARROW);
+  }
 }
 
 /* controlla se il mouse è sopra la scritta
 RICORDATI CHE mouseX e mouseY sono SEMPRE!!!! coordinate della FINESTRA, non dello scontrino,
-quindi devo ricalcolare dove si trova la scritta nella finestra ufff*/ 
+quindi devo ricalcolare dove si trova la scritta nella finestra ufff*/
 function sopraLink() {
-    textSize(13);
-     // definisco la parte cliccabile
-     let larghezzaLink = textWidth("← Torna all'overview");
-    let xLink = width - 380 + 132 - 7;
-    let yLink = 45 + 190 + 5;
+  textSize(13);
+  // definisco la parte cliccabile
+  let larghezzaLink = textWidth("← Torna all'overview");
+  let xLink = width - 380 + 132 - 7;
+  let yLink = 45 + 190 + 5;
 
-    // operatore logico AND quindi tutte devono essere VERE
-    return mouseX > xLink && mouseX < xLink + larghezzaLink && mouseY > yLink && mouseY < yLink + 16;
+  // operatore logico AND quindi tutte devono essere VERE
+  return (
+    mouseX > xLink &&
+    mouseX < xLink + larghezzaLink &&
+    mouseY > yLink &&
+    mouseY < yLink + 16
+  );
 }
 
 /* cliccando sulla scritta torno alla pagina d'insieme
 mousePressed deve stare FUORI da tutte le altre funzioni, altrimenti p5 non la trova
 perché dev'essere utilizzabile ovunque QUINDI va in fondo!! */
 function mousePressed() {
-    // se il paese non esiste, qualsiasi clic riporta all'overview
-    if (sopraLink()) {
-      window.location.href = "index.html";
-    }
+  // se il paese non esiste, qualsiasi clic riporta all'overview
+  if (sopraLink()) {
+    window.location.href = "index.html";
+  }
 }
 
 // linea tratteggiata orizzontale tipo righe scontrino x separare le sezioni
 function drawTratteggio(y, larghezza) {
-    stroke("#C9B49C");
-    strokeWeight(1);
-     for (let x = 20; x < larghezza - 20; x = x + 8) {
+  stroke("#C9B49C");
+  strokeWeight(1);
+  for (let x = 20; x < larghezza - 20; x = x + 8) {
     line(x, y, x + 4, y); // trattino di 4 px, poi 4 px vuoti
-    }
-     noStroke();
+  }
+  noStroke();
 }

@@ -29,7 +29,7 @@ async function setup() {
   textFont("Futura, sans-serif");
 
   // carico il dataset (percorso, separatore, opzioni)
-  dati = await loadTable("assets/caffe.csv", ",", "header"); 
+  dati = await loadTable("assets/caffe.csv", ",", "header");
 
   // cerco il valore più alto di kg a persona
   for (let riga = 0; riga < dati.getRowCount(); riga++) {
@@ -88,7 +88,12 @@ function draw() {
     let y = posizioneY(riga);
     let w = larghezzaTazza(dati.getNum(riga, "kg_procapite"));
     // rettangolo intorno a tazza e piattino
-    if (mouseX > x - w * 0.75 && mouseX < x + w * 0.75 && mouseY > y - w * 1.1 && mouseY < y) {
+    if (
+      mouseX > x - w * 0.75 &&
+      mouseX < x + w * 0.75 &&
+      mouseY > y - w * 1.1 &&
+      mouseY < y
+    ) {
       paeseHover = riga;
     }
   }
@@ -167,7 +172,11 @@ function drawTitolo() {
 
   fill("#7A4E33");
   textSize(18);
-  text("Dove si beve più caffè nel mondo? E quali sono le bevande più popolari?", 42, 88);
+  text(
+    "Dove si beve più caffè nel mondo? E quali sono le bevande più popolari?",
+    42,
+    88,
+  );
 }
 
 // vassoio di legno con le maniglie ai lati
@@ -235,7 +244,11 @@ function drawAssi(xVassoio, yVassoio, altezzaVassoio) {
   // titolo dell'asse x, sotto il vassoio allineato a dx
   fill("#7A4E33");
   textAlign(RIGHT, TOP);
-  text("kg di caffè per persona all'anno", destra, yVassoio + altezzaVassoio + 12);
+  text(
+    "kg di caffè per persona all'anno",
+    destra,
+    yVassoio + altezzaVassoio + 12,
+  );
 }
 
 // x = centro della tazza, yAppoggio = dove appoggia il piattino
@@ -283,7 +296,16 @@ function drawTazza(x, yAppoggio, w, percentuali, evidenziata) {
   // maschera per il rettangolo interno alla tazzina che ha gli angoli in basso arrotondati
   push();
   beginClip();
-  rect(xInterno, yInterno, larghezzaInterna, altezzaInterna, 0, 0, w * 0.1, w * 0.1);
+  rect(
+    xInterno,
+    yInterno,
+    larghezzaInterna,
+    altezzaInterna,
+    0,
+    0,
+    w * 0.1,
+    w * 0.1,
+  );
   endClip();
 
   // strati di caffè, parto dal fondo e salgo
@@ -330,7 +352,7 @@ function drawLegenda() {
   // sposto l'origine nell'angolo dello scontrino e lo giro di 2 gradi
   // da qui in poi tutte le coordinate partono da (0, 0) = angolo in alto a sinistra dello scontrino
   translate(width - 400, 55);
-  rotate(2); 
+  rotate(2);
 
   // carta dello scontrino
   noStroke();
@@ -375,14 +397,21 @@ function drawLegenda() {
   fill("#3B2116");
   textSize(13);
   textAlign(LEFT, TOP);
-  text("Più è in alto, più latte si beve con il caffè (cappuccino e caffellatte).", 20, 222, 260);
+  text(
+    "Più è in alto, più latte si beve con il caffè (cappuccino e caffellatte).",
+    20,
+    222,
+    260,
+  );
   drawTratteggio(268, larghezza);
 
   // interazione e fonte dei dati
   fill("#7A4E33");
   text(
     "Ogni strato è una bevanda. Clicca su una tazza per scoprire quali, fra le bevande con caffè, sono più diffuse in ogni paese.",
-    20, 280, 260
+    20,
+    280,
+    260,
   );
 
   pop();
@@ -425,12 +454,9 @@ function drawRiquadro(riga) {
 
   fill("#D9C2A5");
   textSize(13);
-  text(dati.getNum(riga, "kg_procapite") + " kg per persona all'anno", boxX + 14, boxY + 40);
-
-}
-
-/* ridimensionare tutto in base alle dimensioni della finestra
-però se troppo stretta si vanno a sovrapporre le scritte tra loro */
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  text(
+    dati.getNum(riga, "kg_procapite") + " kg per persona all'anno",
+    boxX + 14,
+    boxY + 40,
+  );
 }
